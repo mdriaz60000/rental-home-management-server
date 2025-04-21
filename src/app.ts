@@ -6,6 +6,7 @@ import cors from "cors";
 
 import { UserRouter } from "./app/modules/user/user.routes";
 import { authRouter } from "./app/modules/auth/auth.routes";
+import { PropertiesRouter } from "./app/modules/propaties/propaties.routes";
 
 
 
@@ -18,6 +19,8 @@ app.use(cors({origin :"", credentials : true}));
 
 app.use("/api/v1/", UserRouter)
 app.use("/api/v1/", authRouter)
+app.use("/api/v1/", PropertiesRouter)
+
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World! ");
