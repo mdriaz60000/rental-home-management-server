@@ -7,6 +7,8 @@ import cors from "cors";
 import { UserRouter } from "./app/modules/user/user.routes";
 import { authRouter } from "./app/modules/auth/auth.routes";
 import { PropertiesRouter } from "./app/modules/propaties/propaties.routes";
+import { listingRouter } from "./app/modules/listing/listing.routes";
+import { landlordRouter } from "./app/modules/landlord/landlord.routes";
 
 
 
@@ -19,7 +21,9 @@ app.use(cors({origin :"", credentials : true}));
 
 app.use("/api/v1/", UserRouter)
 app.use("/api/v1/", authRouter)
-app.use("/api/v1/", PropertiesRouter)
+// app.use("/api/v1/", PropertiesRouter)
+app.use("/api/v1/", listingRouter)
+app.use("/api/v1/", landlordRouter)
 
 
 app.get("/", (req: Request, res: Response) => {

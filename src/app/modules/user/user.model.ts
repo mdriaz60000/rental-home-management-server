@@ -15,29 +15,22 @@ const userSchema = new Schema<TUser>(
       required: true,
       unique: true,
     },
+   
     password: {
       type: String,
       required: true,
       select: 0,
     },
-    needsPasswordChange: {
-      type: Boolean,
-      default: true,
+ 
+    role: { 
+      type: String, 
+      enum: ['tenant', 'landlord', 'admin'], 
+      default: "user"
     },
-    passwordChangedAt: {
-      type: Date,
-      default: null,
-    },
-    role: {
-      type: String,
-      enum: ['user', 'admin'], 
-      default : "user",
-    },
-    status: {
-      type: String,
-      enum: ['in-progress', 'blocked'],
-      default: 'in-progress',
-    },
+    profileImage: { type: String },
+    isVerified: {
+       type: Boolean, default: false
+      },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -74,14 +67,7 @@ userSchema.statics.isPasswordMatched = async function (
   return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
 
-userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
-  passwordChangedTimestamp: Date,
-  jwtIssuedTimestamp: number,
-) {
-  const passwordChangedTime =
-    new Date(passwordChangedTimestamp).getTime() / 1000;
-  return passwordChangedTime > jwtIssuedTimestamp;
-};
+
 
 userSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });

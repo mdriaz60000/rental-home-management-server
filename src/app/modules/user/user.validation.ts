@@ -8,7 +8,7 @@ const UserSchema = z.object({
   password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
   needsPasswordChange: z.boolean().default(true),
   passwordChangedAt: z.date().nullable().default(null),
-  role: z.enum(['user', 'admin']).default('user'),
+  role: z.enum(['user', 'admin', '']).default('user'),
   status: z.enum(['in-progress', 'blocked']).default('in-progress'),
   isDeleted: z.boolean().default(false),
 });

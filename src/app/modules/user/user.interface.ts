@@ -5,14 +5,14 @@ import { USER_ROLE } from './user.constanst';
 
 
 export interface TUser {
-  id: string;
+  
   name : string,
   email: string;
+  phoneNumber: string
   password: string;
-  needsPasswordChange: boolean;
-  passwordChangedAt?: Date;
-  role: 'user' | 'admin' 
-  status: 'in-progress' | 'blocked';
+  role: 'tenant' | 'admin' | 'landlord' | 'user'
+  profileImage: string
+  isVerified: boolean
   isDeleted: boolean;
 }
 

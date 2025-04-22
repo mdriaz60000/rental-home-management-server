@@ -30,6 +30,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
       }
 
       req.user = decoded as JwtPayload;
+     
       next();
     } catch (error) {
       res.status(401).json({ message: "Invalid token" });
