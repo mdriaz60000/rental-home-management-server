@@ -87,21 +87,21 @@ const getListingsByLandlordDb = async (
   return await ListingModel.find({ landlord: landlordId }).populate('landlord');
 };
 
-const searchListingsDb = async (filters: IListingFilters): Promise<TListing[]> => {
-  const query: any = {};
+// const searchListingsDb = async (filters: IListingFilters): Promise<TListing[]> => {
+//   const query: any = {};
   
-  if (filters.minRent || filters.maxRent) {
-    query.rentAmount = {};
-    if (filters.minRent) query.rentAmount.$gte = Number(filters.minRent);
-    if (filters.maxRent) query.rentAmount.$lte = Number(filters.maxRent);
-  }
+//   if (filters.minRent || filters.maxRent) {
+//     query.rentAmount = {};
+//     if (filters.minRent) query.rentAmount.$gte = Number(filters.minRent);
+//     if (filters.maxRent) query.rentAmount.$lte = Number(filters.maxRent);
+//   }
   
-  if (filters.bedrooms) query.bedrooms = Number(filters.bedrooms);
-  if (filters.city) query['location.city'] = filters.city;
-  if (filters.isAvailable) query.isAvailable = filters.isAvailable === 'true';
+//   if (filters.bedrooms) query.bedrooms = Number(filters.bedrooms);
+//   if (filters.city) query['location.city'] = filters.city;
+//   if (filters.isAvailable) query.isAvailable = filters.isAvailable === 'true';
   
-  return await ListingModel.find(query).populate('landlord');
-};
+//   return await ListingModel.find(query).populate('landlord');
+// };
 
 const toggleListingAvailabilityDb = async (
   id: string
@@ -120,6 +120,6 @@ export const listingService = {
   updateListingDb,
   deleteListingDb,
   getListingsByLandlordDb,
-  searchListingsDb,
+  // searchListingsDb,
   toggleListingAvailabilityDb
 };

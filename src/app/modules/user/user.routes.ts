@@ -10,13 +10,13 @@ const router = express.Router();
 
 router.post("/user",  UserController.createUser) 
 
-router.get("/users", auth(USER_ROLE.admin), UserController.getAllUsers) 
+router.get("/users",  UserController.getAllUsers) 
 
 router.get("/user/:id",  UserController.getUserById) 
 
-router.put("/user/:id",  UserController.updateUser) 
+router.put("/user/:id", auth("user", "admin"),  UserController.updateUser) 
 
-router.delete("/user/:id",  UserController.deleteUser) 
+router.delete("/user/:id", auth("user", "admin"),  UserController.deleteUser) 
 
 
 export const UserRouter = router;

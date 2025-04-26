@@ -8,7 +8,7 @@ const propatiesSchema = new Schema<TProperty>(
         type: String,
         required: true,
       },
-      images: {
+      RepresentativeImages: {
         type: String,
         required: true,
       },
@@ -16,7 +16,7 @@ const propatiesSchema = new Schema<TProperty>(
         type: String,
         required: true,
       },
-      Amount: {
+      rentAmount: {
         type: Number,
         required: true,
       },
@@ -24,19 +24,21 @@ const propatiesSchema = new Schema<TProperty>(
         type: Number,
         required: true,
       },
-      category: {
+      MultipleImage:[ {
         type: String,
-        enum: ['rent', 'sale'],
-        required: true,
-      },
+        
+      }],
       location: {
         type: String,
         required: true,
       },
-      ft: {
+      squareFeet: {
         type: Number,
         required: true,
       },
+      Amenities:[{
+        type: String,       
+      }],
       isDeleted: {
         type: Boolean,
         default: false,

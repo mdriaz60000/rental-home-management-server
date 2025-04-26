@@ -1,17 +1,18 @@
 import express from 'express';
 import { adminController } from './admin.controller';
+import auth from '../../middleware/auth';
 
 
 
 
 const router = express.Router();
 
-router.get('/admin/users',adminController.getAllUsers );
-router.put('/admin/users/:id', adminController.updateUserRole );
-router.delete('/admin/users/:id', adminController.deleteUser  );
-router.get('/admin/listings',  adminController.getAllListings);
-router.put('/admin/listings/:id',  adminController.updateListing);
-router.delete('/admin/listings/:id',  adminController.deleteListing);
+router.get('/admin/users', auth("admin"), adminController.getAllUsers );
+router.put('/admin/users/:id', auth("admin"), adminController.updateUserRole );
+router.delete('/admin/users/:id', auth("admin"), adminController.deleteUser  );
+router.get('/admin/listings', auth("admin"),  adminController.getAllListings);
+router.put('/admin/listings/:id', auth("admin"),  adminController.updateListing);
+router.delete('/admin/listings/:id', auth("admin"),  adminController.deleteListing);
 
 
 export const adminRouter  = router;

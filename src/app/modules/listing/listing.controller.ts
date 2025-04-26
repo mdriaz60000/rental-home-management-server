@@ -75,17 +75,17 @@ const getListingsByLandlord = catchAsync(async (req: Request, res: Response) => 
   });
 });
 
-const searchListings = catchAsync(async (req: Request, res: Response) => {
-  const filters = req.query;
-  const result = await listingService.searchListingsDb(filters);
+// const searchListings = catchAsync(async (req: Request, res: Response) => {
+//   const filters = req.query;
+//   const result = await listingService.searchListingsDb(filters);
   
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Listings filtered successfully',
-    data: result,
-  });
-});
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: 'Listings filtered successfully',
+//     data: result,
+//   });
+// });
 
 const toggleListingAvailability = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -106,6 +106,5 @@ export const listingController = {
   updateListing,
   deleteListing,
   getListingsByLandlord,
-  searchListings,
   toggleListingAvailability
 };

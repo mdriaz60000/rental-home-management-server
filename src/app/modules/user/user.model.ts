@@ -3,6 +3,7 @@ import mongoose, { Schema, model } from 'mongoose';
 import { TUser } from './user.interface';
 import config from '../../config';
 
+
 const userSchema = new Schema<TUser>(
   {
     name: {
@@ -21,10 +22,14 @@ const userSchema = new Schema<TUser>(
       required: true,
       select: 0,
     },
+     confirmPassword : {
+      type: String,
+      select: 0,
+     },
  
     role: { 
       type: String, 
-      enum: ['tenant', 'landlord', 'admin'], 
+      enum: ['tenant', 'landlord', 'admin', 'user'], 
       default: "user"
     },
     profileImage: { type: String },
@@ -44,10 +49,11 @@ const userSchema = new Schema<TUser>(
 userSchema.pre('save', async function (next) {
   
   const user = this; 
-  user.password = await bcrypt.hash(
-    user.password,
+  user.password  = await bcrypt.hash(
+    user.password, 
     Number(config.bcrypt_salt_rounds),
   );
+
   next();
 });
 
@@ -55,6 +61,23 @@ userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();
 });
+/// confirm password
+userSchema.pre('save', async function (next) {
+  
+  const user = this; 
+  user.confirmPassword = await bcrypt.hash(
+    user.confirmPassword,
+    Number(config.bcrypt_salt_rounds),
+  );
+
+  next();
+});
+
+userSchema.post('save', function (doc, next) {
+  doc.confirmPassword = '';
+  next();
+});
+
 
 userSchema.statics.isUserExistsByCustomId = async function (id: string) {
   return await User.findOne({ id }).select('+password');

@@ -11,7 +11,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
     const result = await authServices.registerIntoDb(req.body);
     
     
-    const { email, role, name } = result;
+    const { email, role, name, } = result;
     const accessToken = jwt.sign({ email, role }, config.jwt_access_secret as string, { expiresIn: "2d" });
     const reFreshToken = jwt.sign({ email, role }, config.jwt_refresh_secret as string, { expiresIn: "30d" });
 
@@ -44,7 +44,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     const result = await authServices.loginIntoDb(req.body);
     const { reFreshToken, accessUser, accessToken} = result
 
-     res.cookie("reFreshToken", reFreshToken, {
+     res.cookie("reFreshToken", reFreshToken,  {
       secure: config.node_env === "production",
       httpOnly: true,
      })

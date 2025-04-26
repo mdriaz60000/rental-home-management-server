@@ -4,13 +4,14 @@
 export interface TProperty {
     _id: string; 
     title: string; 
-    images: string; 
+    RepresentativeImages: string; 
     description: string; 
-    Amount: number; 
+    rentAmount: number; 
     bedrooms: number; 
-    category:  'rent' | 'sale'
+    MultipleImage: string[];
     location: string;
-    ft: number
+    Amenities: string[];
+    squareFeet: number
     isDeleted: boolean
 
     

@@ -11,7 +11,8 @@ export interface TUser {
   phoneNumber: string
   password: string;
   role: 'tenant' | 'admin' | 'landlord' | 'user'
-  profileImage: string
+  profileImage?: string,
+  confirmPassword: string
   isVerified: boolean
   isDeleted: boolean;
 }

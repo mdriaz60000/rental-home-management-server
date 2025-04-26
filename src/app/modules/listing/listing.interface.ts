@@ -5,12 +5,7 @@ export interface TListing  {
   title: string;
   description: string;
   squareFeet: number
-  location: {
-    address: string;
-    city: string;
-    state: string;
-    zipCode: string;
-  };
+  location:string;
   rentAmount: number;
   bedrooms: number;
   amenities: string[];

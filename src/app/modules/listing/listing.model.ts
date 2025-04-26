@@ -13,11 +13,7 @@ const listingSchema = new Schema(
     bedrooms: { type: Number, required: true },
     amenities: [{ type: String }],
     images: [{ type: String }],
-    // landlord: { 
-    //   type: Schema.Types.ObjectId, 
-    //   ref: 'User', 
-    //   required: true 
-    // },
+   
     isAvailable: { type: Boolean, default: true }
   },
   { timestamps: true }
