@@ -20,7 +20,7 @@ const requestSchema = new Schema(
       default: 'pending' 
     },
     specialRequirements: { type: String },
-    landlordContact: { type: String }, // Added upon approval
+    landlordContact: { type: String },
     paymentStatus: { 
       type: String, 
       enum: ['pending', 'completed', 'failed'], 

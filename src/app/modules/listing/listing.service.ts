@@ -11,7 +11,7 @@ const createListingDb = async (payload: TListing) => {
 };
 
 const getListingByIdDb = async (id: string)=> {
-  return await ListingModel.findById(id).populate('landlord');
+  return await ListingModel.find();
 };
 
 const getAllListingsDb = async () =>{

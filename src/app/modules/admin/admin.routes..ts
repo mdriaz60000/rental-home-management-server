@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/admin/users', auth("admin"), adminController.getAllUsers );
 router.put('/admin/users/:id', auth("admin"), adminController.updateUserRole );
 router.delete('/admin/users/:id', auth("admin"), adminController.deleteUser  );
-router.get('/admin/listings', auth("admin"),  adminController.getAllListings);
+router.get('/admin/listing',   adminController.getAllListings);
 router.put('/admin/listings/:id', auth("admin"),  adminController.updateListing);
 router.delete('/admin/listings/:id', auth("admin"),  adminController.deleteListing);
 

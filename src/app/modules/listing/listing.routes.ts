@@ -5,9 +5,9 @@ import auth from '../../middleware/auth';
 
 const router = express.Router();
 
-router.post("/listing",auth("admin", "landlord"),  listingController.createListing) 
+router.post("/listings",  listingController.createListing) 
 
-router.get("/allProperty", auth("admin", "landlord"),  listingController.getAllListings) 
+router.get("/admin/listings",  listingController.getAllListings) 
 
 router.get("/property/:id",auth("admin", "landlord"),   listingController.getListingById) 
 

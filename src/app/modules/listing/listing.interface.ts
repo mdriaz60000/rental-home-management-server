@@ -1,7 +1,7 @@
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 export interface TListing  {
-  
+  landlordId: mongoose.Schema.Types.ObjectId;
   title: string;
   description: string;
   squareFeet: number
@@ -12,6 +12,7 @@ export interface TListing  {
   images: string[];
   landlord: Types.ObjectId;
   isAvailable: boolean;
+  status: "pending" | "reject" | "proved"
 
 }
 
