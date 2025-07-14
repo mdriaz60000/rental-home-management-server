@@ -5,7 +5,7 @@ import { UserService } from './user.service';
   const  createUser = async (req: Request, res: Response, next : NextFunction) => {
     try {
       const {name, email, password, phoneNumber, profileImage  } = req.body
-      console.log(email, password, name)
+    
       const userData : any = { name, email, password, phoneNumber, profileImage };
       const result = await UserService.createUserDb(userData)
       res.status(200).json({
@@ -46,7 +46,7 @@ const getUserById = async (req: Request, res: Response, ) => {
   //  Get all users
   const getAllUsers = async (req: Request, res: Response) => {
     try {
-      console.log("testy", req.user)
+      
       const users = await UserService.getAllUserDb();
        res.status(httpStatus.OK).json({
         success: true,
@@ -90,12 +90,7 @@ const deleteUser = async(req: Request, res: Response) => {
     try {
       const  id  = req.params._id
       const deletedUser = await UserService.deleteUserDb(id);
-      // if (!deletedUser) {
-      //   return res.status(httpStatus.NOT_FOUND).json({
-      //     success: false,
-      //     message: 'User not found',
-      //   });
-      // }
+  
        res.status(httpStatus.OK).json({
         success: true,
         message: 'User deleted successfully',

@@ -20,7 +20,7 @@ const updateUserDb = async (userId : string, updateData:TUser) => {
   return result;
 };
 const deleteUserDb = async (userId : string) => {
-  const result = await User.findByIdAndUpdate({_id:userId},  { isDeleted: true }); 
+  const result = await User.findByIdAndUpdate({userId},  { isDeleted: true }); 
   return result;
 };
 

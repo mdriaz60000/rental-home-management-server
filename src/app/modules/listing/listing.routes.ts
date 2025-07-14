@@ -7,13 +7,17 @@ const router = express.Router();
 
 router.post("/listings",  listingController.createListing) 
 
-router.get("/admin/listings",  listingController.getAllListings) 
+router.get("/listings",  listingController.getAllListings)
 
-router.get("/property/:id",auth("admin", "landlord"),   listingController.getListingById) 
+router.get("/listings/:id",  listingController.singleListing) 
 
-router.put("/propertyUpdate/:id",auth("admin", "landlord"),   listingController.updateListing)
+router.get("/search",  listingController.getListingsSearch) 
+ 
+router.get("/listingsed/:userId",  listingController.getListingById) 
 
-router.delete("/propertyDelete/:id",auth("admin", "landlord"),   listingController.deleteListing) 
+router.patch("/listings/:id",   listingController.updateListing)
+
+router.patch("/listingsDelete/:id",   listingController.deleteListing) 
 
 
 

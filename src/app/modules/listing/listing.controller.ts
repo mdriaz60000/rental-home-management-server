@@ -15,20 +15,42 @@ const createListing = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getListingById = catchAsync(async (req: Request, res: Response) => {
+const singleListing = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await listingService.getListingByIdDb(id);
+  const result = await listingService.singleListingDb(id);
   
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Listing retrieved successfully',
+    message: 'Listing id data successfully',
+    data: result,
+  });
+});
+const getListingById = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const result = await listingService.getListingByIdDb(userId);
+  
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Listing id data successfully',
     data: result,
   });
 });
 
 const getAllListings = catchAsync(async (req: Request, res: Response) => {
-  const result = await listingService.getAllListingsDb();
+  
+  const result = await listingService.getAllListingsDb(req.query);
+  
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Listings retrieved successfully',
+    data: result,
+  });
+});
+const getSearchListings = catchAsync(async (req: Request, res: Response) => {
+  const result = await listingService.getSearchListingsDb(req.query);
   
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -40,7 +62,8 @@ const getAllListings = catchAsync(async (req: Request, res: Response) => {
 
 const updateListing = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const payload = req.body;
+  const {payload} = req.body;
+ 
   const result = await listingService.updateListingDb(id, payload);
   
   sendResponse(res, {
@@ -53,6 +76,7 @@ const updateListing = catchAsync(async (req: Request, res: Response) => {
 
 const deleteListing = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
+  console.log(id)
   const result = await listingService.deleteListingDb(id);
   
   sendResponse(res, {
@@ -63,41 +87,21 @@ const deleteListing = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getListingsByLandlord = catchAsync(async (req: Request, res: Response) => {
-  const { landlordId } = req.params;
-  const result = await listingService.getListingsByLandlordDb(landlordId);
+const getListingsSearch = catchAsync(async (req: Request, res: Response) => {
+
+// console.log(req.query)
+  const result = await listingService.getSearchListingsDb(req.query) ;
   
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Landlord listings retrieved successfully',
+    message: ' listings search successfully',
     data: result,
   });
 });
 
-// const searchListings = catchAsync(async (req: Request, res: Response) => {
-//   const filters = req.query;
-//   const result = await listingService.searchListingsDb(filters);
-  
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Listings filtered successfully',
-//     data: result,
-//   });
-// });
 
-const toggleListingAvailability = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const result = await listingService.toggleListingAvailabilityDb(id);
-  
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Listing availability toggled successfully',
-    data: result,
-  });
-});
+
 
 export const listingController = {
   createListing,
@@ -105,6 +109,6 @@ export const listingController = {
   getAllListings,
   updateListing,
   deleteListing,
-  getListingsByLandlord,
-  toggleListingAvailability
+  getListingsSearch,
+  singleListing
 };

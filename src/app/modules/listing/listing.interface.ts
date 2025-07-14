@@ -4,15 +4,16 @@ export interface TListing  {
   landlordId: mongoose.Schema.Types.ObjectId;
   title: string;
   description: string;
-  squareFeet: number
+  squareFeet: string
   location:string;
-  rentAmount: number;
-  bedrooms: number;
+  rentAmount: string;
+  bedrooms: string;
   amenities: string[];
   images: string[];
   landlord: Types.ObjectId;
   isAvailable: boolean;
-  status: "pending" | "reject" | "proved"
+  status: "pending" | "reject" | "proved",
+  isDelete: boolean;
 
 }
 
@@ -23,4 +24,5 @@ export type IListingFilters = {
   bedrooms?: string;
   city?: string;
   isAvailable?: string;
+  
 };

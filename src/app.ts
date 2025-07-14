@@ -8,22 +8,25 @@ import { UserRouter } from "./app/modules/user/user.routes";
 import { authRouter } from "./app/modules/auth/auth.routes";
 import { PropertiesRouter } from "./app/modules/propaties/propaties.routes";
 import { listingRouter } from "./app/modules/listing/listing.routes";
-import { landlordRouter } from "./app/modules/landlord/landlord.routes";
 
-
+import { requestRouter } from "./app/modules/request/request.routes";
+import { messageRouter } from "./app/modules/message/message.routes";
 
 // parser middleware
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(cors({origin :"http://localhost:3000", credentials : true}));
 
+// app.use(cors({origin :"https://rental-home-management.vercel.app", credentials : true}));
 
 
 app.use("/api/v1/", UserRouter)
 app.use("/api/v1/", authRouter)
  app.use("/api/v1/", PropertiesRouter)
 app.use("/api/v1/", listingRouter)
-app.use("/api/v1/", landlordRouter)
+app.use("/api/v1", requestRouter)
+app.use("/api/v1", messageRouter)
 
 
 app.get("/", (req: Request, res: Response) => {

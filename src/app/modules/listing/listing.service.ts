@@ -1,117 +1,127 @@
 
 import { FilterQuery, QueryOptions } from 'mongoose';
 
-// import { IPaginationOptions } from '../../../interfaces/pagination';
-// import { paginationHelpers } from '../../../utils/paginationHelper';
+
 import { ListingModel } from './listing.model';
 import { IListingFilters, TListing } from './listing.interface';
 
 const createListingDb = async (payload: TListing) => {
   return await ListingModel.create(payload);
 };
-
-const getListingByIdDb = async (id: string)=> {
-  return await ListingModel.find();
+const singleListingDb = async (id : string) => {
+  return await ListingModel.findById({_id : id});
 };
 
-const getAllListingsDb = async () =>{
-  return await ListingModel.find()
-}
-// const getAllListingsDb = async (
-//   filters: IListingFilters,
-//   paginationOptions: IPaginationOptions
-// ) => {
-//   const { page, limit, skip, sortBy, sortOrder } = 
-//     paginationHelpers.calculatePagination(paginationOptions);
-  
-//   const { searchTerm, ...filtersData } = filters;
-//   const andConditions = [];
-  
-//   if (searchTerm) {
-//     andConditions.push({
-//       $or: [
-//         { title: { $regex: searchTerm, $options: 'i' } },
-//         { 'location.city': { $regex: searchTerm, $options: 'i' } },
-//         { 'location.address': { $regex: searchTerm, $options: 'i' } }
-//       ]
-//     });
-//   }
-  
-//   if (Object.keys(filtersData).length) {
-//     andConditions.push({
-//       $and: Object.entries(filtersData).map(([field, value]) => ({
-//         [field]: value
-//       }))
-//     });
-//   }
-  
-//   const sortConditions: { [key: string]: 1 | -1 } = {};
-//   if (sortBy && sortOrder) {
-//     sortConditions[sortBy] = sortOrder === 'asc' ? 1 : -1;
-//   }
-  
-//   const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
-  
-//   const result = await ListingModel.find(whereConditions)
-//     .populate('landlord')
-//     .sort(sortConditions)
-//     .skip(skip)
-//     .limit(limit);
-  
-//   const total = await ListingModel.countDocuments(whereConditions);
-  
-//   return {
-//     meta: {
-//       page,
-//       limit,
-//       total
-//     },
-//     data: result
-//   };
-// };
+const getListingByIdDb = async (userId: string)=> {
+  return await ListingModel.find({ landlordId : userId  });
+};
+
+// const getAllListingsDb = async (query: any) =>{
+
+//   const result = await ListingModel.find()
+//   return result
+// }
+
+
+const getAllListingsDb = async (query: any) => {
+  const { searchTerm, page = 1, limit = 6 } = query;
+
+  const andConditions: any[] = [];
+
+  if (searchTerm) {
+    const isNumeric = !isNaN(Number(searchTerm));
+
+    andConditions.push({
+      $or: [
+        { location: { $regex: searchTerm, $options: 'i' } },
+        ...(isNumeric ? [{ rentAmount: Number(searchTerm) }] : []),
+        ...(isNumeric ? [{ bedrooms: Number(searchTerm) }] : [])
+      ]
+    });
+  }
+
+  const whereCondition = andConditions.length ? { $and: andConditions } : {};
+
+  const skip = (Number(page) - 1) * Number(limit);
+
+  const listings = await ListingModel.find(whereCondition)
+    .skip(skip)
+    .limit(Number(limit))
+    .sort({ createdAt: -1 }); 
+
+  const total = await ListingModel.countDocuments(whereCondition);
+
+  return {
+    meta: {
+      page: Number(page),
+      limit: Number(limit),
+      total,
+    },
+    data: listings,
+  };
+};
+
+
 
 const updateListingDb = async (
   id: string,
   payload: Partial<TListing>
 ): Promise<TListing | null> => {
-  return await ListingModel.findByIdAndUpdate(id, payload, { new: true });
+  return await ListingModel.findOneAndUpdate({id}, payload);
 };
 
-const deleteListingDb = async (id: string): Promise<TListing | null> => {
-  return await ListingModel.findByIdAndDelete(id);
+const deleteListingDb = async (id: string) => {
+  const result = await ListingModel.updateOne({_id: id}, {isDelete:true});
+  return result
 };
 
-const getListingsByLandlordDb = async (
-  landlordId: string
-) => {
-  return await ListingModel.find({ landlord: landlordId }).populate('landlord');
+const getSearchListingsDb = async (params: any) => {
+  const { location } = params;
+
+  const matchStage: any = {};
+  const cleanedLocation = location?.trim();
+
+  if (cleanedLocation) {
+    matchStage.$or = [
+      { location: { $regex: cleanedLocation, $options: 'i' } },
+      { address: { $regex: cleanedLocation, $options: 'i' } },
+      { city: { $regex: cleanedLocation, $options: 'i' } },
+      { title: { $regex: cleanedLocation, $options: 'i' } }
+    ];
+  }
+
+  const listings = await ListingModel.aggregate([
+    { $match: matchStage },
+
+    
+    {
+      $addFields: {
+        matchScore: {
+          $cond: [
+            { $eq: [{ $toLower: "$location" }, cleanedLocation.toLowerCase()] }, 2,
+            {
+              $cond: [
+                { $regexMatch: { input: "$location", regex: cleanedLocation, options: "i" } },
+                1,
+                0
+              ]
+            }
+          ]
+        }
+      }
+    },
+
+   
+    { $sort: { matchScore: -1, createdAt: -1 } },
+
+    
+    { $limit: 50 }
+  ]);
+
+  return listings;
 };
 
-// const searchListingsDb = async (filters: IListingFilters): Promise<TListing[]> => {
-//   const query: any = {};
-  
-//   if (filters.minRent || filters.maxRent) {
-//     query.rentAmount = {};
-//     if (filters.minRent) query.rentAmount.$gte = Number(filters.minRent);
-//     if (filters.maxRent) query.rentAmount.$lte = Number(filters.maxRent);
-//   }
-  
-//   if (filters.bedrooms) query.bedrooms = Number(filters.bedrooms);
-//   if (filters.city) query['location.city'] = filters.city;
-//   if (filters.isAvailable) query.isAvailable = filters.isAvailable === 'true';
-  
-//   return await ListingModel.find(query).populate('landlord');
-// };
 
-const toggleListingAvailabilityDb = async (
-  id: string
-) => {
-  const listing = await ListingModel.findById(id);
-  if (!listing) return null;
-  
-  listing.isAvailable = !listing.isAvailable;
-  return await listing.save();
-};
 
 export const listingService = {
   createListingDb,
@@ -119,7 +129,6 @@ export const listingService = {
   getAllListingsDb,
   updateListingDb,
   deleteListingDb,
-  getListingsByLandlordDb,
-  // searchListingsDb,
-  toggleListingAvailabilityDb
+  getSearchListingsDb,
+  singleListingDb
 };
