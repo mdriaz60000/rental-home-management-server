@@ -62,7 +62,6 @@ const getAllListingsDb = async (query: any) => {
 };
 
 
-
 const updateListingDb = async (
   id: string,
   payload: Partial<TListing>
@@ -76,7 +75,9 @@ const deleteListingDb = async (id: string) => {
 };
 
 const getSearchListingsDb = async (params: any) => {
+  
   const { location } = params;
+ 
 
   const matchStage: any = {};
   const cleanedLocation = location?.trim();
